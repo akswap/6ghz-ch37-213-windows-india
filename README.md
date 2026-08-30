@@ -11,11 +11,40 @@ This repository documents my **real Windows PC testing of 6 GHz Wi‑Fi channels
 | Motherboard | **Gigabyte B760M DS3H AX Rev. 1.2** |
 | Wi‑Fi adapters | **Intel Wi‑Fi 6E AX411** and **Intel Wi‑Fi 7 BE200 320MHz** |
 | Operating system | Windows |
-| Confirmed Wi‑Fi 7 test | Intel BE200 / Intel AX411 |
+| Confirmed full-band/high-channel result | **Intel BE200 (standalone PCIe/M.2 adapter)** |
+| Built-in AX411 result | **Tested, but the same full-band behavior was not reproduced** |
 | Tested Intel driver | **23.0.6.4** |
 | Windows Home Location | **India (GeoId 113)** |
 
 The confirmed motherboard is **Gigabyte B760M DS3H AX Rev. 1.2**. Similar Intel 12th Gen or newer systems may behave similarly, but other platforms have not all been individually verified.
+
+## Important AX411 vs BE200 Hardware Note
+
+The motherboard-integrated **Intel AX411** did **not** reproduce the same full 6 GHz/high-channel behavior in this system, even after applying the same normal Intel driver settings and test procedure.
+
+The successful result documented in this repository is from a **standalone Intel BE200 installed as a PCIe/M.2 Wi‑Fi adapter**.
+
+This is an important distinction:
+
+```text
+Built-in Intel AX411
+→ CNVio2 / platform-integrated path
+→ Tested on this motherboard
+→ Same full-band behavior NOT reproduced
+
+Standalone Intel BE200
+→ PCIe/M.2 adapter path
+→ Intel driver 23.0.6.4
+→ High 6 GHz channel behavior reproduced
+→ Ch 101 active connection confirmed
+→ Ch 165 scan visibility confirmed
+```
+
+This strongly suggests that the result depends on the **specific adapter architecture plus Intel driver/firmware path**, and is not simply the result of a generic Windows registry setting.
+
+A different external PCIe/M.2 Intel adapter may behave differently, so external-M.2 compatibility should not be treated as universal until separately tested.
+
+If further AX411 or other Intel adapter results are obtained, this section will be updated.
 
 ## What "No Modification" Means
 
@@ -44,7 +73,7 @@ For the closest reproduction, use the same driver version shown in the test scre
 
 1. Temporarily disconnect the PC from the Internet so Windows Update does not immediately replace the driver.
 2. Open **Device Manager → Network adapters**.
-3. Select **Intel(R) Wi‑Fi 6E AX411** or **Intel(R) Wi‑Fi 7 BE200 320MHz**.
+3. Select the Intel Wi‑Fi adapter.
 4. Choose **Uninstall device**.
 5. If Windows shows **Attempt to remove the driver for this device**, select it.
 6. Reboot if requested.
@@ -260,7 +289,7 @@ So Channel 165 is not just theoretical in this setup: the normal Windows WLAN sc
 
 | Evidence | Ch 37 | Ch 101 | Ch 165 |
 |---|:---:|:---:|:---:|
-| Seen in my testing | ✅ | ✅ | ✅ |
+| Seen in my BE200 testing | ✅ | ✅ | ✅ |
 | NETSH scan excerpt published here | To add | ✅ | ✅ |
 | `802.11be` shown by Windows | To add | ✅ | ✅ |
 | Active connection proof published | To add | ✅ | To add |
@@ -287,14 +316,14 @@ These commands are useful because they preserve the actual Windows-reported **ra
 
 ## Tested Adapters
 
-| Adapter | Standard | 6 GHz | Status |
+| Adapter | Interface type | 6 GHz | Full-band/high-channel result |
 |---|---|:---:|---|
-| Intel AX411 | Wi‑Fi 6E | ✅ | Tested |
-| Intel BE200 | Wi‑Fi 7 / 802.11be | ✅ | Tested; Ch 101 active link and Ch 165 visibility evidence shown |
+| Intel AX411 | Built-in / CNVio2 | ✅ | ❌ Same behavior not reproduced on this system |
+| Intel BE200 | Standalone PCIe/M.2 | ✅ | ✅ Confirmed; Ch 101 active link and Ch 165 visibility evidence shown |
 
 ## Compatibility Notes
 
-This result should not be treated as a guarantee for every PC. Behavior can vary with:
+This result should not be treated as a guarantee for every PC or every Intel adapter. Behavior can vary with:
 
 - Intel CPU/platform generation
 - motherboard M.2 / CNVio / PCIe implementation
@@ -305,7 +334,7 @@ This result should not be treated as a guarantee for every PC. Behavior can vary
 - router/AP firmware
 - AP regulatory configuration
 
-The **Gigabyte B760M DS3H AX Rev. 1.2** system is the confirmed reference platform.
+The **Gigabyte B760M DS3H AX Rev. 1.2 + standalone Intel BE200** combination is the confirmed reference platform for the full-band/high-channel result documented here.
 
 ## Why This Repository Exists
 
@@ -314,6 +343,7 @@ The goal is to document actual Windows client behavior using normal Intel hardwa
 If you reproduce the test on another Intel platform, please include:
 
 - motherboard and CPU
+- whether the Wi‑Fi adapter is built-in/CNVio or standalone PCIe/M.2
 - Intel Wi‑Fi adapter model
 - exact driver version
 - Windows version/build
