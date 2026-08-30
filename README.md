@@ -14,7 +14,7 @@ This repository documents my real Windows PC testing of 6 GHz Wi‑Fi using Inte
 | Operating system | Windows |
 | Tested Intel driver | **23.0.6.4** |
 | Working driver branch/service | **Netwtw14** |
-| Windows Home Location | **India (GeoId 113)** |
+| Windows Home Location | **India (GeoId 113)** /**US (GeoId 244)** |
 
 ## Main Result
 
@@ -26,7 +26,8 @@ Confirmed observations include:
 - **Channel 101** — easy visibility and confirmed active 802.11be connection
 - **Channel 165** — successfully detected; discovery can be less consistent than Ch 37/101
 - Intel BE200 link rates in testing have reached up to approximately **5764 Mbps** under favorable conditions
-
+- after reboot PC you may need to desable Wifi adapter & re-enable to see/connect 6ghz full band ch 37 to 213
+- PCI M2 card is suitable Motherboard inbuilt Card not works terst on Intel ax411.
 ## Screenshot Evidence
 
 ### BE200 — Windows Network Properties
@@ -50,7 +51,7 @@ Adapter        : Intel(R) Wi-Fi 7 BE200 320MHz
 Driver Version : 23.0.6.4
 Network Band   : 6 GHz
 Channel        : 101
-Link Speed     : 4323 / 4323 Mbps
+Link Speed     : 5188 / 5188 Mbps
 Security       : WPA3-Personal
 ```
 
@@ -75,8 +76,8 @@ Band                   : 6 GHz
 Channel                : 101
 Radio type             : 802.11be
 Authentication         : WPA3-Personal (H2E)
-Receive rate (Mbps)    : 3458.8
-Transmit rate (Mbps)   : 1729.4
+Receive rate (Mbps)    : 5188.8
+Transmit rate (Mbps)   : 5188.4
 Signal                 : 89%
 Rssi                   : -49
 ```
@@ -153,7 +154,17 @@ GeoId HomeLocation
 ----- ------------
 113   India
 ```
+```powershell
+Get-WinHomeLocation
+```
 
+Result:
+
+```text
+GeoId HomeLocation
+----- ------------
+244   US
+```
 The PC was rebooted after changing the Home Location. After reboot, Channel 101 still connected successfully and Channel 165 was still detected by the normal Windows scan.
 
 > Windows Home Location and the Wi‑Fi radio regulatory domain are not necessarily the same mechanism. This only documents the actual Windows Home Location used during the successful retest.
