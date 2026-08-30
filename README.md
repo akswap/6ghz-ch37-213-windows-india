@@ -11,7 +11,7 @@ This repository documents my **real Windows PC testing of 6 GHz Wi‑Fi channels
 | Motherboard | **Gigabyte B760M DS3H AX Rev. 1.2** |
 | Wi‑Fi adapters | **Intel Wi‑Fi 6E AX411** and **Intel Wi‑Fi 7 BE200 320MHz** |
 | Operating system | Windows |
-| Confirmed Wi‑Fi 7 test | Intel BE200 |
+| Confirmed Wi‑Fi 7 test | Intel BE200 /intel ax411 |
 | Tested Intel driver | **23.0.6.4** |
 
 The confirmed motherboard is **Gigabyte B760M DS3H AX Rev. 1.2**. Similar Intel 12th Gen or newer systems may behave similarly, but other platforms have not all been individually verified.
