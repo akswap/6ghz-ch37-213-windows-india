@@ -1,6 +1,6 @@
 # Windows 6 GHz Wi‑Fi Testing in India — Intel BE200 / AX411 / AX210
 
-This repository documents my real Windows PC testing of 6 GHz Wi‑Fi using Intel adapters, with emphasis on higher 6 GHz channels and older Intel driver behavior.
+This repository documents real Windows PC testing of 6 GHz Wi‑Fi using Intel adapters, with emphasis on higher 6 GHz channels and older Intel driver behavior.
 
 > **Important:** This is a technical test record, not a regulatory-bypass guide. Channel availability and permitted operation depend on the AP, client, firmware, driver, and local regulations. Use only frequencies/channels permitted for your location and equipment.
 
@@ -10,89 +10,105 @@ This repository documents my real Windows PC testing of 6 GHz Wi‑Fi using Inte
 |---|---|
 | Motherboard | **Gigabyte B760M DS3H AX Rev. 1.2** |
 | Confirmed adapter | **Intel Wi‑Fi 7 BE200 320MHz — standalone PCIe/M.2** |
-| Built-in adapter | **Intel AX411 / CNVio2 — same full-band behavior not reproduced** |
+| Built-in adapter | **Intel AX411 / CNVio2 — 6 GHz can be detected, but discovery is difficult/inconsistent and the same BE200 behavior was not reproduced** |
 | Operating system | Windows |
 | Tested Intel driver | **23.0.6.4** |
 | Working driver branch/service | **Netwtw14** |
-| Windows Home Location | **India (GeoId 113)** /**US (GeoId 244)** |
+| Windows Home Location tested | **India (GeoId 113)** and **US (GeoId 244)** at different stages of testing |
 
 ## Main Result
 
-With the standalone Intel BE200 and Intel driver **23.0.6.4 / Netwtw14**, Windows successfully detected and connected to 6 GHz Wi‑Fi on the tested higher channels without patching the Intel driver, modifying Intel firmware, forcing a country code in the adapter registry, or disabling LAR through a custom registry hack.
+With the standalone Intel BE200 and Intel driver **23.0.6.4 / Netwtw14**, Windows successfully detected and actively connected to 6 GHz Wi‑Fi at multiple widely separated channel positions, including the lower, middle, high and top end of the tested range.
 
-Confirmed observations include:
+Current active-connection evidence includes:
 
-- **Channel 37** — easiest / most consistent visibility in my testing
-- **Channel 101** — easy visibility and confirmed active 802.11be connection
-- **Channel 165** — successfully detected; discovery can be less consistent than Ch 37/101
-- Intel BE200 link rates in testing have reached up to approximately **5764 Mbps** under favorable conditions
-- after reboot PC you may need to desable Wifi adapter & re-enable to see/connect 6ghz full band ch 37 to 213
-- PCI M2 card is suitable Motherboard inbuilt Card not works tested on Intel ax411.
-## Screenshot Evidence
+| 6 GHz channel | Windows protocol | Driver | Windows aggregated link speed shown in test capture |
+|---:|---|---|---:|
+| **37** | 802.11be | 23.0.6.4 | **4803 / 4803 Mbps** |
+| **101** | 802.11be | 23.0.6.4 | **4323 / 4323 Mbps** |
+| **133** | 802.11be | 23.0.6.4 | **4803 / 4803 Mbps** |
+| **149** | 802.11be | 23.0.6.4 | **4323 / 4323 Mbps** |
+| **165** | 802.11be | 23.0.6.4 | **5188 / 5188 Mbps** |
+| **213** | 802.11be | 23.0.6.4 | **4803 / 4803 Mbps** |
 
-### BE200 — Windows Network Properties
+These are active Windows connection results, not only passive scan visibility.
 
-The screenshots below are the actual Windows test captures stored in this repository.
+The BE200 currently follows the 6 GHz channel selected on the AP/router directly in the tested setup. After the setup became stable, repeated adapter disable/re-enable was **not required** for normal BE200 operation.
+
+The BE200 link rate is dynamic. In separate testing the link has also reached approximately **5764 Mbps** under favorable conditions.
+
+## Screenshot Evidence Already Stored in This Repository
+
+The screenshots below are actual Windows test captures already stored in this repository.
 
 ![Intel BE200 Windows Network Properties — test screenshot 1](screenshots/1111.png)
 
 ![Intel BE200 Windows Network Properties — test screenshot 2](screenshots/22.png)
 
-The captured Windows properties show the Intel BE200 using the tested **23.0.6.4** driver and a 6 GHz / 802.11be connection on the tested setup.
+Additional active-connection screenshots have now been captured for Channels **37, 133, 149, 165 and 213**. They can be added to the repository as individual image files for permanent visual evidence.
 
 ## Active Connection Proof — Channel 101
 
 Windows Network Properties reported:
 
 ```text
-SSID           : TP-Link_5G-6G_MLO
+SSID           : TP-Link_5G-6G_MLO / TP-Link_6G_be
 Protocol       : 802.11be
 Adapter        : Intel(R) Wi-Fi 7 BE200 320MHz
 Driver Version : 23.0.6.4
 Network Band   : 6 GHz
 Channel        : 101
-Link Speed     : 5188 / 5188 Mbps
+Link Speed     : 4323 / 4323 Mbps (published Windows Properties capture)
 Security       : WPA3-Personal
 ```
 
-The link rate is dynamic. In my testing the same BE200 320 MHz setup has reached approximately **5764 Mbps** under favorable conditions.
+A live `netsh wlan show interfaces` capture from the same test platform also confirmed an active 6 GHz / 802.11be connection on Channel 101.
 
-## Live Interface Proof — `netsh wlan show interfaces`
+## New Active Windows UI Proof — Channels 37 / 133 / 149 / 165 / 213
 
-Command:
-
-```powershell
-netsh wlan show interfaces
-```
-
-Relevant output from the India-region retest:
+Recent Windows Network Properties captures show the same Intel BE200 and driver **23.0.6.4** actively connected on the following channels:
 
 ```text
-Description            : Intel(R) Wi-Fi 7 BE200 320MHz
-State                  : connected
-SSID                   : TP-Link_5G-6G_MLO
-AP BSSID               : ba:6e:84:e3:5d:f5
-Band                   : 6 GHz
-Channel                : 101
-Radio type             : 802.11be
-Authentication         : WPA3-Personal (H2E)
-Receive rate (Mbps)    : 5188.8
-Transmit rate (Mbps)   : 5188.4
-Signal                 : 89%
-Rssi                   : -49
+Channel 37
+Protocol       : 802.11be
+Band           : 6 GHz
+Link Speed     : 4803 / 4803 Mbps
+
+Channel 133
+Protocol       : 802.11be
+Band           : 6 GHz
+Link Speed     : 4803 / 4803 Mbps
+
+Channel 149
+Protocol       : 802.11be
+Band           : 6 GHz
+Link Speed     : 4323 / 4323 Mbps
+
+Channel 165
+Protocol       : 802.11be
+Band           : 6 GHz
+Link Speed     : 5188 / 5188 Mbps
+
+Channel 213
+Protocol       : 802.11be
+Band           : 6 GHz
+Link Speed     : 4803 / 4803 Mbps
 ```
 
-The live `netsh` receive/transmit values can change moment by moment and therefore do not need to match the higher link-speed value shown by Windows Network Properties.
+This is stronger evidence than scan visibility alone because Windows shows an established Wi‑Fi 7 connection on each of these channel positions.
 
 ## PowerShell / NETSH Scan Evidence
 
-Command:
+Useful commands:
 
 ```powershell
+netsh wlan show interfaces
 netsh wlan show networks mode=bssid
 ```
 
-### Channel 101
+Previously captured scan evidence includes Channel 101 and Channel 165 as 6 GHz / 802.11be networks.
+
+Example Channel 101 scan:
 
 ```text
 SSID : TP-Link_5G-6G_MLO
@@ -104,70 +120,94 @@ SSID : TP-Link_5G-6G_MLO
          Band               : 6 GHz
          Channel            : 101
          Details            : (H2E Required) (MLD)
-         MLD Address        : a8:6e:84:e3:5d:f5
 ```
 
-A separate 6 GHz SSID from the same AP was also visible:
+Example Channel 165 scan:
 
 ```text
-SSID : TP-Link_6G_be
+SSID : MobSoftAP_Router
     Authentication          : WPA3-Personal
     Encryption              : CCMP
-    BSSID 1                 : ba:6e:84:e3:5d:f4
-         Signal             : 90%
-         Radio type         : 802.11be
-         Band               : 6 GHz
-         Channel            : 101
-         Details            : (H2E Required) (MLD)
+    BSSID                   : 36:63:b2:35:86:52
+    Signal                  : 86%
+    Radio type              : 802.11be
+    Band                    : 6 GHz
+    Channel                 : 165
+    Details                 : (H2E Required) (MLD)
 ```
 
-### Channel 165 — detected after India-region reboot
+Channel 165 is now additionally confirmed by an **active Windows connection** at **5188 / 5188 Mbps**, so it should no longer be described as scan-only evidence.
+
+## Current BE200 Stability Observation
+
+During earlier testing with the old Intel driver, 6 GHz discovery could sometimes take a few minutes. Similar delayed discovery has also been reported publicly by AX210 users using older Intel drivers.
+
+A quick Wi‑Fi adapter disable/re-enable can refresh discovery in such situations. However, on the current BE200 setup the connection is now operating **without requiring repeated adapter resets or enable/disable cycles**.
+
+Therefore the current observation is:
 
 ```text
-SSID 1 : MobSoftAP_Router
-    Network type            : Infrastructure
-    Authentication          : WPA3-Personal
-    Encryption              : CCMP
-    BSSID 1                 : 36:63:b2:35:86:52
-         Signal             : 86%
-         Radio type         : 802.11be
-         Band               : 6 GHz
-         Channel            : 165
-         Details            : (H2E Required) (MLD)
-         MFP Required       : 1
+BE200 + 23.0.6.4 / Netwtw14
+→ stable 6 GHz operation in the present setup
+→ direct connection to the AP-selected tested channel
+→ no repeated enable/disable workaround currently required
 ```
 
-This confirms that the normal Windows WLAN scanner detected an **802.11be / 6 GHz AP on Channel 165** in the tested configuration.
+This should not be interpreted as a guarantee that every system will have identical discovery timing.
 
-## Tested with Windows Home Location set to India
+## AX411 vs BE200 Hardware Result
 
-Before the final retest, Windows Home Location was set to India:
+The motherboard-integrated **AX411** behaves differently from the standalone BE200 on this system.
+
+```text
+Built-in AX411
+→ CNVio2 / platform-integrated path
+→ 6 GHz can be detected
+→ discovery is difficult / inconsistent
+→ same stable BE200 high-channel behavior not reproduced
+
+Standalone BE200
+→ PCIe/USB M.2 path
+→ Driver 23.0.6.4 / Netwtw14
+→ stable in current testing
+→ active connections confirmed at Ch 37, 101, 133, 149, 165 and 213
+```
+
+This suggests the result depends on the **specific adapter architecture plus Intel driver/firmware/platform path**, not only on a generic Windows registry setting.
+
+## AX210 / AX211 Candidate Notes
+
+The **Intel AX210** is a standalone PCIe/USB M.2 Wi‑Fi 6E adapter and is therefore a stronger candidate for this experiment than CNVio2-based AX211/AX411.
+
+Public user reports show AX210 6 GHz operation working with older Intel drivers in situations where newer drivers did not expose 6 GHz correctly. Some reports also describe delayed discovery and improvement after an adapter disable/re-enable cycle.
+
+Those reports support AX210 as a plausible candidate, but the exact multi-channel behavior documented here with BE200 still requires direct AX210 testing on this project.
+
+```text
+AX210 (PCIe/USB M.2) → Not yet tested here; strong candidate. Older-driver 6 GHz operation reported publicly.
+AX211 (CNVio2)       → Different platform-integrated architecture.
+AX411 (CNVio2)       → 6 GHz detectable but difficult/inconsistent; same BE200 behavior not reproduced.
+BE200 (PCIe/USB M.2) → Confirmed working and currently stable in this project.
+```
+
+## Tested with Windows Home Location
+
+Windows Home Location was tested at different stages as India and US:
 
 ```powershell
 Get-WinHomeLocation
 ```
 
-Result:
+Observed values included:
 
 ```text
-GeoId HomeLocation
------ ------------
 113   India
-```
-```powershell
-Get-WinHomeLocation
-```
-
-Result:
-
-```text
-GeoId HomeLocation
------ ------------
 244   US
 ```
-The PC was rebooted after changing the Home Location. After reboot, Channel 101 still connected successfully and Channel 165 was still detected by the normal Windows scan.
 
-> Windows Home Location and the Wi‑Fi radio regulatory domain are not necessarily the same mechanism. This only documents the actual Windows Home Location used during the successful retest.
+Successful BE200 testing was performed after setting Windows Home Location to India and rebooting, including Channel 101 connection and Channel 165 visibility.
+
+> Windows Home Location and the Wi‑Fi radio regulatory domain are not necessarily the same mechanism. These values only document the Windows Home Location used during testing.
 
 ## What “No Modification” Means
 
@@ -195,92 +235,49 @@ RoamingPreferredBandType
 
 These are ordinary Intel adapter options, not evidence of a regulatory bypass.
 
+## Driver Package / OEM Observation
+
+The tested **23.0.6.4** package is an Intel Wi‑Fi driver distributed through a Dell/OEM package path.
+
+Static inspection of the driver binaries shows OEM-specific strings and handling, including examples such as:
+
+```text
+Dell Inc.
+Alienware
+EnableDellSmartAntenna
+```
+
+This confirms that OEM-specific platform handling is compiled into the Intel driver codebase. It does **not** by itself prove that a Dell-specific runtime path is responsible for the observed 6 GHz behavior on this motherboard.
+
 ## Why the Older Intel Driver Can Behave Differently
 
-A strings-level comparison was made between the working **Netwtw14** binary and a newer **Netwtw18** branch binary.
+A strings-level comparison was made between the working **Netwtw14** binary and a newer **Netwtw18/Netwaw18** branch binary.
 
 Both contain Intel LAR/regulatory-related logic, so the working result should **not** be described as “LAR removed” or “LAR disabled.”
 
-Examples found in the working Netwtw14 branch include:
+Importantly, the symbol:
 
 ```text
-mhiffLariChangeConfigCmdVer6
-EV_MMAC_LAR_MCC_NOTIFICATION
-EV_MMAC_LAR_MCC_TEST_MODE_STATE_CHANGED
-7001 - 11d Location MCC value (WRDD)
-mUtilReadNewRegulatoryLimits
-mhiffTranslatRegulatoryTasConfigVer4
+prvLarRemoveBssEntriesWithInvalidChannels
 ```
 
-Examples found in the newer Netwtw18 branch include:
+is present in the old branch as well as the newer branch. Therefore, the presence of this function alone does **not** explain the behavioral difference.
+
+The more interesting difference is that the newer branch exposes more explicit OEM/platform regulatory-policy machinery, including strings associated with:
 
 ```text
-mhiffLariChangeConfigCmdVer12
-mhiffLariChangeConfigCmdVer13
-mhiffLariConfigOverrideCmdVer1
-prvLarRemoveBssEntriesWithInvalidChannels
-prvUpdateHe160RatesAcordingToLar
+CnvUefiWlanUATS
+UefiCnvWlanUNEB
+DSM3 - WiFi 6E country settings
+DSM9 - OEM disabled bands
+mhiffProcessMccAllowedApTypeTable
+larSendMccAllowedApTypeApi
 getWifiCountryRegionList
-prvBssVifTelemetryGetCountryCodeFromIeMap
-prvhSpctrmHandleCountryIe
-prvhSpctrmSet11dCountryOid
-mhiffTranslatRegulatoryTasConfigVer5
 ```
 
-One particularly interesting newer-driver symbol is:
+The old branch also contains OEM/UHB-related capability handling, but the newer branch appears to integrate these platform/OEM inputs more explicitly into regulatory and allowed-AP-type processing.
 
-```text
-prvLarRemoveBssEntriesWithInvalidChannels
-```
-
-Its name suggests that newer LAR logic can remove BSS scan entries considered invalid by the driver. This is consistent with the practical observation that newer driver branches can detect 6 GHz faster but behave more restrictively for some higher 6 GHz channels.
-
-This remains an implementation-level observation from binary strings; it is **not proof of the exact internal decision path**.
-
-## 6 GHz Detection Speed Observation
-
-In my testing:
-
-| Behavior | Older 23.0.6.4 / Netwtw14 | Newer Netwtw18 branch |
-|---|---|---|
-| 6 GHz discovery | Can take roughly **2–3 minutes** | Usually much faster |
-| Higher-channel visibility | Better in my BE200 testing | Can be more restrictive |
-| LAR/regulatory logic | Present | Present, newer implementation |
-
-So with the older driver, users should not immediately assume 6 GHz is unavailable if it does not appear on the first scan. Waiting a few minutes and rescanning can matter.
-
-## AX411 vs BE200 Hardware Result
-
-The motherboard-integrated **AX411** did **not** reproduce the same full-band/high-channel behavior on this system.
-
-```text
-Built-in AX411
-→ CNVio2 / platform-integrated path
-→ Same full-band behavior NOT reproduced
-
-Standalone BE200
-→ PCIe/USB M.2 path
-→ Driver 23.0.6.4 / Netwtw14
-→ Ch 101 active connection confirmed
-→ Ch 165 visibility confirmed
-```
-
-This suggests the behavior depends on the **specific adapter architecture plus Intel driver/firmware path**, not only on a generic Windows registry setting.
-
-## AX210 / AX211 Candidate Notes
-
-The **Intel AX210** is a standalone PCIe/USB M.2 Wi‑Fi 6E adapter and is therefore a stronger candidate for this experiment than CNVio2-based AX211/AX411.
-
-Public user reports have already shown AX210 6 GHz operation working with older Intel drivers in situations where newer drivers did not expose 6 GHz correctly. That supports AX210 as a plausible candidate, but the exact Ch 37–213 / Ch 101 / Ch 165 behavior documented here with BE200 still needs direct AX210 testing.
-
-Current view:
-
-```text
-AX210 (PCIe/USB M.2) → Not yet tested here; strong candidate. Older-driver 6 GHz operation has been reported publicly.
-AX211 (CNVio2)       → Different platform-integrated architecture.
-AX411 (CNVio2)       → Tested here; same full-band/high-channel behavior not reproduced.
-BE200 (PCIe/USB M.2) → Confirmed working in this project.
-```
+This is static binary evidence only. It does **not** prove which exact path executes for a particular connection, and it should not be treated as instructions for disabling regulatory enforcement.
 
 ## Required / Tested Driver
 
@@ -307,14 +304,15 @@ If Windows keeps restoring another Intel package from the Driver Store, remove t
 
 ## Evidence Summary
 
-| Evidence | Ch 37 | Ch 101 | Ch 165 |
-|---|:---:|:---:|:---:|
-| Seen in BE200 testing | ✅ | ✅ | ✅ |
-| NETSH evidence currently documented | To add | ✅ | ✅ |
-| 802.11be shown by Windows | To add | ✅ | ✅ |
-| Active connection proof | To add | ✅ | To add |
-| India Home Location + reboot retest | To add | ✅ | ✅ visibility |
-| Discovery consistency | Excellent | Excellent | Less consistent |
+| Evidence | Ch 37 | Ch 101 | Ch 133 | Ch 149 | Ch 165 | Ch 213 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| Seen in BE200 testing | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 802.11be shown by Windows | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Active Windows connection proof | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Windows Properties link-speed capture | 4803 | 4323 | 4803 | 4323 | 5188 | 4803 |
+| NETSH scan evidence in README | — | ✅ | — | — | ✅ | — |
+
+The table documents representative channel positions that were actively tested. It should not be interpreted as proof that every possible 6 GHz channel has individually been tested unless a corresponding test record is added.
 
 ## Save Your Own Evidence
 
@@ -330,7 +328,7 @@ Show the current connection:
 netsh wlan show interfaces
 ```
 
-Useful reproduction details include motherboard/CPU, adapter model, whether the adapter is CNVio or standalone PCIe/M.2, exact Intel driver version, Windows build, Windows Home Location, AP/router model and firmware, selected 6 GHz channel, and the raw `netsh` output.
+Useful reproduction details include motherboard/CPU, adapter model, whether the adapter is CNVio or standalone PCIe/M.2, exact Intel driver version, Windows build, Windows Home Location, AP/router model and firmware, selected 6 GHz channel, and raw `netsh` output.
 
 ## Compatibility Notes
 
@@ -345,7 +343,7 @@ Behavior may vary with:
 - router/AP firmware
 - AP regulatory configuration
 
-The **Gigabyte B760M DS3H AX Rev. 1.2 + standalone Intel BE200** combination is the confirmed reference platform for the high-channel result documented here.
+The **Gigabyte B760M DS3H AX Rev. 1.2 + standalone Intel BE200** combination is the confirmed reference platform for the multi-channel active-connection result documented here.
 
 ## Disclaimer
 
