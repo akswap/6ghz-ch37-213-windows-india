@@ -12,7 +12,7 @@ This repository documents my **real Windows PC testing of 6 GHz Wi‑Fi channels
 | Wi‑Fi adapters | **Intel Wi‑Fi 6E AX411** and **Intel Wi‑Fi 7 BE200 320MHz** |
 | Operating system | Windows |
 | Confirmed Wi‑Fi 7 test | Intel BE200 |
-| Tested Intel driver | **23.60.0.4** |
+| Tested Intel driver | **23.0.6.4** |
 
 The confirmed motherboard is **Gigabyte B760M DS3H AX Rev. 1.2**. Similar Intel 12th Gen or newer systems may behave similarly, but other platforms have not all been individually verified.
 
@@ -27,10 +27,10 @@ The AP/router must still be capable of operating on the selected channel and mus
 My reproducible result uses:
 
 ```text
-Intel Wi‑Fi Driver: 23.60.0.4
+Intel Wi‑Fi Driver: 23.0.6.4
 ```
 
-For the closest reproduction, use the same driver version shown in the test screenshot. If a different Intel Wi‑Fi driver is already installed, completely remove that package before installing **23.60.0.4**.
+For the closest reproduction, use the same driver version shown in the test screenshot. If a different Intel Wi‑Fi driver is already installed, completely remove that package before installing **23.0.6.4**.
 
 ### Clean driver installation
 
@@ -40,11 +40,11 @@ For the closest reproduction, use the same driver version shown in the test scre
 4. Choose **Uninstall device**.
 5. If Windows shows **Attempt to remove the driver for this device**, select it.
 6. Reboot if requested.
-7. Install Intel Wi‑Fi driver **23.60.0.4**.
+7. Install Intel Wi‑Fi driver **23.0.6.4**.
 8. Reboot Windows.
 9. Verify the version under **Device Manager → adapter → Properties → Driver**.
 
-If Windows keeps reinstalling another Intel package from the Driver Store, remove the unwanted package first and then reinstall 23.60.0.4. Do not let Windows Update replace the test driver while reproducing the result.
+If Windows keeps reinstalling another Intel package from the Driver Store, remove the unwanted package first and then reinstall 23.0.6.4. Do not let Windows Update replace the test driver while reproducing the result.
 
 ## 6 GHz Channel Observations
 
@@ -65,7 +65,7 @@ Windows Network Properties on the Intel BE200 reports:
 ```text
 Protocol       : 802.11be
 Adapter        : Intel(R) Wi‑Fi 7 BE200 320MHz
-Driver Version : 23.60.0.4
+Driver Version : 23.0.6.4
 Network Band   : 6 GHz
 Channel        : 101
 Link Speed     : 4323 / 4323 Mbps
