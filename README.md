@@ -27,7 +27,7 @@ Confirmed observations include:
 - **Channel 165** — successfully detected; discovery can be less consistent than Ch 37/101
 - Intel BE200 link rates in testing have reached up to approximately **5764 Mbps** under favorable conditions
 - after reboot PC you may need to desable Wifi adapter & re-enable to see/connect 6ghz full band ch 37 to 213
-- PCI M2 card is suitable Motherboard inbuilt Card not works terst on Intel ax411.
+- PCI M2 card is suitable Motherboard inbuilt Card not works tested on Intel ax411.
 ## Screenshot Evidence
 
 ### BE200 — Windows Network Properties
