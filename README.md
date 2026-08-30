@@ -1,6 +1,8 @@
-# Windows 6 GHz Wi‑Fi Testing in India — Intel BE200 / AX411 / AX210
+# Intel BE200 6 GHz Wi‑Fi on Windows — Driver 23.0.6.4 / AX411 / AX210 Testing
 
-This repository documents real Windows PC testing of 6 GHz Wi‑Fi using Intel adapters, with emphasis on higher 6 GHz channels and older Intel driver behavior.
+Real-world Windows testing of **Intel BE200 320MHz Wi‑Fi 7 / 6 GHz**, with additional **Intel AX411** observations and **AX210** candidate notes. The confirmed BE200 setup uses Intel driver **23.0.6.4 / Netwtw14** and has established active 802.11be connections on representative 6 GHz channels from **37 through 213**.
+
+Keywords: **Intel BE200 6GHz Windows, BE200 driver 23.0.6.4, Wi‑Fi 7 6GHz, AX411 6GHz, AX210 6GHz, Netwtw14, 802.11be**.
 
 > **Important:** This is a technical test record, not a regulatory-bypass guide. Channel availability and permitted operation depend on the AP, client, firmware, driver, and local regulations. Use only frequencies/channels permitted for your location and equipment.
 
@@ -10,7 +12,7 @@ This repository documents real Windows PC testing of 6 GHz Wi‑Fi using Intel a
 |---|---|
 | Motherboard | **Gigabyte B760M DS3H AX Rev. 1.2** |
 | Confirmed adapter | **Intel Wi‑Fi 7 BE200 320MHz — standalone PCIe/M.2** |
-| Built-in adapter | **Intel AX411 / CNVio2 — 6 GHz can be detected, but discovery is difficult/inconsistent and the same BE200 behavior was not reproduced** |
+| Built-in adapter | **Intel AX411 / CNVio2 — 6 GHz can be detected, but discovery is delayed/inconsistent and the same stable BE200 behavior was not reproduced** |
 | Operating system | Windows |
 | Tested Intel driver | **23.0.6.4** |
 | Working driver branch/service | **Netwtw14** |
@@ -19,8 +21,6 @@ This repository documents real Windows PC testing of 6 GHz Wi‑Fi using Intel a
 ## Main Result
 
 With the standalone Intel BE200 and Intel driver **23.0.6.4 / Netwtw14**, Windows successfully detected and actively connected to 6 GHz Wi‑Fi at multiple widely separated channel positions, including the lower, middle, high and top end of the tested range.
-
-Current active-connection evidence includes:
 
 | 6 GHz channel | Windows protocol | Driver | Windows aggregated link speed shown in test capture |
 |---:|---|---|---:|
@@ -39,17 +39,13 @@ The BE200 link rate is dynamic. In separate testing the link has also reached ap
 
 ## Screenshot Evidence Already Stored in This Repository
 
-The screenshots below are actual Windows test captures already stored in this repository.
-
 ![Intel BE200 Windows Network Properties — test screenshot 1](screenshots/1111.png)
 
 ![Intel BE200 Windows Network Properties — test screenshot 2](screenshots/22.png)
 
-Additional active-connection screenshots have now been captured for Channels **37, 133, 149, 165 and 213**. They can be added to the repository as individual image files for permanent visual evidence.
+Additional active-connection screenshots have been captured for Channels **37, 133, 149, 165 and 213** and can be stored as individual image files for permanent visual evidence.
 
 ## Active Connection Proof — Channel 101
-
-Windows Network Properties reported:
 
 ```text
 SSID           : TP-Link_5G-6G_MLO / TP-Link_6G_be
@@ -64,35 +60,14 @@ Security       : WPA3-Personal
 
 A live `netsh wlan show interfaces` capture from the same test platform also confirmed an active 6 GHz / 802.11be connection on Channel 101.
 
-## New Active Windows UI Proof — Channels 37 / 133 / 149 / 165 / 213
-
-Recent Windows Network Properties captures show the same Intel BE200 and driver **23.0.6.4** actively connected on the following channels:
+## Active Windows UI Proof — Channels 37 / 133 / 149 / 165 / 213
 
 ```text
-Channel 37
-Protocol       : 802.11be
-Band           : 6 GHz
-Link Speed     : 4803 / 4803 Mbps
-
-Channel 133
-Protocol       : 802.11be
-Band           : 6 GHz
-Link Speed     : 4803 / 4803 Mbps
-
-Channel 149
-Protocol       : 802.11be
-Band           : 6 GHz
-Link Speed     : 4323 / 4323 Mbps
-
-Channel 165
-Protocol       : 802.11be
-Band           : 6 GHz
-Link Speed     : 5188 / 5188 Mbps
-
-Channel 213
-Protocol       : 802.11be
-Band           : 6 GHz
-Link Speed     : 4803 / 4803 Mbps
+Channel 37  : 802.11be / 6 GHz / 4803 / 4803 Mbps
+Channel 133 : 802.11be / 6 GHz / 4803 / 4803 Mbps
+Channel 149 : 802.11be / 6 GHz / 4323 / 4323 Mbps
+Channel 165 : 802.11be / 6 GHz / 5188 / 5188 Mbps
+Channel 213 : 802.11be / 6 GHz / 4803 / 4803 Mbps
 ```
 
 This is stronger evidence than scan visibility alone because Windows shows an established Wi‑Fi 7 connection on each of these channel positions.
@@ -136,15 +111,11 @@ SSID : MobSoftAP_Router
     Details                 : (H2E Required) (MLD)
 ```
 
-Channel 165 is now additionally confirmed by an **active Windows connection** at **5188 / 5188 Mbps**, so it should no longer be described as scan-only evidence.
+Channel 165 is additionally confirmed by an **active Windows connection** at **5188 / 5188 Mbps**.
 
-## Current BE200 Stability Observation
+## BE200 Stability Observation
 
-During earlier testing with the old Intel driver, 6 GHz discovery could sometimes take a few minutes. Similar delayed discovery has also been reported publicly by AX210 users using older Intel drivers.
-
-A quick Wi‑Fi adapter disable/re-enable can refresh discovery in such situations. However, on the current BE200 setup the connection is now operating **without requiring repeated adapter resets or enable/disable cycles**.
-
-Therefore the current observation is:
+During earlier testing with the old Intel driver, 6 GHz discovery could sometimes take a few minutes. A quick Wi‑Fi adapter disable/re-enable can refresh discovery in such situations. However, on the current BE200 setup the connection is now operating **without requiring repeated adapter resets or enable/disable cycles**.
 
 ```text
 BE200 + 23.0.6.4 / Netwtw14
@@ -155,16 +126,23 @@ BE200 + 23.0.6.4 / Netwtw14
 
 This should not be interpreted as a guarantee that every system will have identical discovery timing.
 
-## AX411 vs BE200 Hardware Result
+## AX411 vs BE200 — Important Hardware Difference
 
-The motherboard-integrated **AX411** behaves differently from the standalone BE200 on this system.
+The motherboard-integrated **Intel AX411** behaves very differently from the standalone BE200 on this system.
+
+With an early Intel driver, the AX411 has occasionally detected 6 GHz, including higher-channel operation, but discovery is **not reliably reproducible**. Even **Channel 37 can take roughly 3–5 minutes to appear**, and a higher channel may appear on one test but fail to appear on another.
+
+The Device Manager advanced property **Global BG Scan Blocking** is already at its default **Never** value during this observation. Therefore, the AX411 delay cannot simply be attributed to that setting being configured to block background scans.
 
 ```text
 Built-in AX411
 → CNVio2 / platform-integrated path
-→ 6 GHz can be detected
-→ discovery is difficult / inconsistent
-→ same stable BE200 high-channel behavior not reproduced
+→ 6 GHz is genuinely detectable
+→ Ch 37 may take about 3–5 minutes to appear
+→ higher channels have appeared occasionally
+→ discovery timing is inconsistent / unpredictable
+→ Global BG Scan Blocking = Never (default)
+→ same stable BE200 behavior not reproduced
 
 Standalone BE200
 → PCIe/USB M.2 path
@@ -173,7 +151,7 @@ Standalone BE200
 → active connections confirmed at Ch 37, 101, 133, 149, 165 and 213
 ```
 
-This suggests the result depends on the **specific adapter architecture plus Intel driver/firmware/platform path**, not only on a generic Windows registry setting.
+This suggests the result depends on the **specific adapter architecture plus Intel driver/firmware/platform path**, not only on a generic Windows registry or scan setting.
 
 ## AX210 / AX211 Candidate Notes
 
@@ -186,7 +164,7 @@ Those reports support AX210 as a plausible candidate, but the exact multi-channe
 ```text
 AX210 (PCIe/USB M.2) → Not yet tested here; strong candidate. Older-driver 6 GHz operation reported publicly.
 AX211 (CNVio2)       → Different platform-integrated architecture.
-AX411 (CNVio2)       → 6 GHz detectable but difficult/inconsistent; same BE200 behavior not reproduced.
+AX411 (CNVio2)       → 6 GHz detectable but delayed/inconsistent; same BE200 behavior not reproduced.
 BE200 (PCIe/USB M.2) → Confirmed working and currently stable in this project.
 ```
 
@@ -263,7 +241,7 @@ prvLarRemoveBssEntriesWithInvalidChannels
 
 is present in the old branch as well as the newer branch. Therefore, the presence of this function alone does **not** explain the behavioral difference.
 
-The more interesting difference is that the newer branch exposes more explicit OEM/platform regulatory-policy machinery, including strings associated with:
+The newer branch exposes more explicit OEM/platform regulatory-policy machinery, including strings associated with:
 
 ```text
 CnvUefiWlanUATS
@@ -310,21 +288,14 @@ If Windows keeps restoring another Intel package from the Driver Store, remove t
 | 802.11be shown by Windows | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Active Windows connection proof | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Windows Properties link-speed capture | 4803 | 4323 | 4803 | 4323 | 5188 | 4803 |
-| NETSH scan evidence in README |✅| ✅ |✅| ✅ | ✅ |✅ |
+| NETSH / Windows evidence documented | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 The table documents representative channel positions that were actively tested. It should not be interpreted as proof that every possible 6 GHz channel has individually been tested unless a corresponding test record is added.
 
 ## Save Your Own Evidence
 
-Save a complete scan:
-
 ```powershell
 netsh wlan show networks mode=bssid > 6ghz-scan.txt
-```
-
-Show the current connection:
-
-```powershell
 netsh wlan show interfaces
 ```
 
@@ -332,16 +303,7 @@ Useful reproduction details include motherboard/CPU, adapter model, whether the 
 
 ## Compatibility Notes
 
-Behavior may vary with:
-
-- Intel CPU/platform generation
-- motherboard M.2 / CNVio / PCIe implementation
-- adapter architecture
-- BIOS version
-- Windows build
-- Intel driver version
-- router/AP firmware
-- AP regulatory configuration
+Behavior may vary with Intel CPU/platform generation, motherboard M.2/CNVio/PCIe implementation, adapter architecture, BIOS version, Windows build, Intel driver version, router/AP firmware, and AP regulatory configuration.
 
 The **Gigabyte B760M DS3H AX Rev. 1.2 + standalone Intel BE200** combination is the confirmed reference platform for the multi-channel active-connection result documented here.
 
