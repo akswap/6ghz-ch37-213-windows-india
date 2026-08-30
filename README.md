@@ -21,6 +21,12 @@ The confirmed motherboard is **Gigabyte B760M DS3H AX Rev. 1.2**. Similar Intel 
 
 No custom or patched Intel driver is used. No registry hack, Windows system-file modification, regulatory database edit, Wi‑Fi card firmware patch, Linux `iw reg set`, Magisk/root, or modified client software is required on the Windows PC.
 
+The working driver package is an Intel Windows Wi‑Fi driver package, and the successful test uses the normal Intel driver stack reported by Windows as **23.0.6.4 / Netwtw14**.
+
+The registry export from the working BE200 installation was also checked for obvious user-level regulatory overrides. No explicit `DisableLAR`, `CountryCode`, `RegDomain`, `RegulatoryDomain`, FCC/world-domain override, or similar country-forcing value was found. The visible 6 GHz settings were ordinary adapter options such as 6 GHz enabled and 6 GHz channel width set to Auto.
+
+This is important because the result is being documented as **driver behavior observed on an unmodified Windows installation**, not as the result of a hidden registry or country-code hack.
+
 The AP/router must still be capable of operating on the selected channel and must be configured in accordance with the rules that apply in your location.
 
 ## Required / Tested Intel Driver
@@ -29,6 +35,7 @@ My reproducible result uses:
 
 ```text
 Intel Wi‑Fi Driver: 23.0.6.4
+Driver branch/service: Netwtw14
 ```
 
 For the closest reproduction, use the same driver version shown in the test screenshot. If a different Intel Wi‑Fi driver is already installed, completely remove that package before installing **23.0.6.4**.
@@ -46,6 +53,58 @@ For the closest reproduction, use the same driver version shown in the test scre
 9. Verify the version under **Device Manager → adapter → Properties → Driver**.
 
 If Windows keeps reinstalling another Intel package from the Driver Store, remove the unwanted package first and then reinstall 23.0.6.4. Do not let Windows Update replace the test driver while reproducing the result.
+
+## Why the older Intel driver can behave differently
+
+A strings-level comparison was made between the **working Netwtw14** driver binary and a **newer Netwtw18** branch binary.
+
+Both binaries contain Intel LAR/regulatory-related logic. Therefore, the working result should **not** be described as "LAR removed" or "LAR disabled". LAR-related code exists in the working Netwtw14 driver too.
+
+However, the newer Netwtw18 branch contains newer regulatory/LARI interfaces and additional channel-filtering-related routines.
+
+Examples observed in the binaries include:
+
+```text
+Working Netwtw14:
+  mhiffLariChangeConfigCmdVer6
+  EV_MMAC_LAR_MCC_NOTIFICATION
+  EV_MMAC_LAR_MCC_TEST_MODE_STATE_CHANGED
+  7001 - 11d Location MCC value (WRDD)
+  mUtilReadNewRegulatoryLimits
+  mhiffTranslatRegulatoryTasConfigVer4
+
+Newer Netwtw18:
+  mhiffLariChangeConfigCmdVer12
+  mhiffLariChangeConfigCmdVer13
+  mhiffLariConfigOverrideCmdVer1
+  prvLarRemoveBssEntriesWithInvalidChannels
+  prvUpdateHe160RatesAcordingToLar
+  getWifiCountryRegionList
+  prvBssVifTelemetryGetCountryCodeFromIeMap
+  prvhSpctrmHandleCountryIe
+  prvhSpctrmSet11dCountryOid
+  mhiffTranslatRegulatoryTasConfigVer5
+```
+
+The most interesting newer-driver symbol is:
+
+```text
+prvLarRemoveBssEntriesWithInvalidChannels
+```
+
+Its name strongly suggests that newer LAR logic can remove BSS scan entries that the driver considers to be on invalid channels.
+
+This matches the practical observation that the older **23.0.6.4 / Netwtw14** branch exposes more of the tested 6 GHz channel range, while newer Intel branches can behave more restrictively.
+
+### Important interpretation
+
+This comparison is **evidence of a driver-branch implementation change**, not proof of the exact internal decision path. A strings comparison alone cannot prove which function is ultimately responsible for a particular channel being shown or hidden.
+
+The safe conclusion is:
+
+> Both Netwtw14 and Netwtw18 contain Intel LAR/regulatory logic, but Netwtw18 includes newer LARI interfaces and explicit channel/BSS filtering-related routines. This indicates that Intel substantially revised regulatory filtering in the newer driver branch.
+
+That distinction is important: this project does **not** rely on a patched Intel `.sys` file, a disabled-LAR registry trick, or a forced country-domain value. The difference being documented is the behavior of different Intel driver generations.
 
 ## Tested with Windows Home Location set to India
 
