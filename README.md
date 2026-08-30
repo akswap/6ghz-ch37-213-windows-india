@@ -42,9 +42,26 @@ Standalone Intel BE200
 
 This strongly suggests that the result depends on the **specific adapter architecture plus Intel driver/firmware path**, and is not simply the result of a generic Windows registry setting.
 
-A different external PCIe/M.2 Intel adapter may behave differently, so external-M.2 compatibility should not be treated as universal until separately tested.
+### AX210 — strong candidate for testing
 
-If further AX411 or other Intel adapter results are obtained, this section will be updated.
+The **Intel AX210** is a standalone PCIe/USB M.2 Wi‑Fi 6E adapter, so architecturally it is a much better candidate for this experiment than CNVio2-based AX211/AX411.
+
+There are already multiple public user reports showing that AX210 6 GHz operation can depend strongly on Intel driver generation. In several Intel Community and Microsoft Q&A reports, users found that older AX210 driver versions restored 6 GHz visibility/connectivity when newer drivers did not.
+
+Examples reported publicly include older AX210 drivers such as **22.45.1.1** restoring 6 GHz on systems where later 22.x releases only showed 2.4/5 GHz. Some users also reported that 6 GHz discovery with the older driver could take up to a few minutes.
+
+These reports **support AX210 as a plausible standalone-PCIe candidate**, but they do **not yet prove the same Channel 37–213 / Ch 101 / Ch 165 behavior documented here with BE200**. That specific high-channel behavior still needs direct AX210 testing.
+
+Current compatibility view:
+
+```text
+AX210 (PCIe/USB M.2) → Not yet tested here; strong candidate. Public users have reported 6 GHz working with older Intel drivers.
+AX211 (CNVio2)       → Different platform-integrated architecture.
+AX411 (CNVio2)       → Tested here; full-band/high-channel behavior not reproduced.
+BE200 (PCIe/USB M.2) → Confirmed working in this project.
+```
+
+If further AX210, AX211, AX411 or other Intel adapter results are obtained, this section will be updated.
 
 ## What "No Modification" Means
 
@@ -314,12 +331,14 @@ netsh wlan show interfaces
 
 These commands are useful because they preserve the actual Windows-reported **radio type, band, channel, signal, BSSID, H2E and MLD information**.
 
-## Tested Adapters
+## Tested / Candidate Adapters
 
-| Adapter | Interface type | 6 GHz | Full-band/high-channel result |
+| Adapter | Interface type | 6 GHz | Full-band/high-channel status |
 |---|---|:---:|---|
+| Intel AX210 | Standalone PCIe/USB M.2 | ✅ | **Not tested here; strong candidate. Public user reports confirm 6 GHz can work with older Intel drivers** |
+| Intel AX211 | CNVio2 | ✅ | Different platform-integrated architecture; not tested here for this behavior |
 | Intel AX411 | Built-in / CNVio2 | ✅ | ❌ Same behavior not reproduced on this system |
-| Intel BE200 | Standalone PCIe/M.2 | ✅ | ✅ Confirmed; Ch 101 active link and Ch 165 visibility evidence shown |
+| Intel BE200 | Standalone PCIe/USB M.2 | ✅ | ✅ Confirmed; Ch 101 active link and Ch 165 visibility evidence shown |
 
 ## Compatibility Notes
 
@@ -327,7 +346,7 @@ This result should not be treated as a guarantee for every PC or every Intel ada
 
 - Intel CPU/platform generation
 - motherboard M.2 / CNVio / PCIe implementation
-- AX411 vs BE200 hardware interface requirements
+- adapter architecture
 - BIOS version
 - Windows build
 - Intel driver version
