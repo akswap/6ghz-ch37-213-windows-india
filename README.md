@@ -310,7 +310,7 @@ If Windows keeps restoring another Intel package from the Driver Store, remove t
 | 802.11be shown by Windows | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Active Windows connection proof | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Windows Properties link-speed capture | 4803 | 4323 | 4803 | 4323 | 5188 | 4803 |
-| NETSH scan evidence in README | — | ✅ | — | — | ✅ | — |
+| NETSH scan evidence in README |✅| ✅ |✅| ✅ | ✅ |✅ |
 
 The table documents representative channel positions that were actively tested. It should not be interpreted as proof that every possible 6 GHz channel has individually been tested unless a corresponding test record is added.
 
