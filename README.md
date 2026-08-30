@@ -11,8 +11,9 @@ This repository documents my **real Windows PC testing of 6 GHz Wi‑Fi channels
 | Motherboard | **Gigabyte B760M DS3H AX Rev. 1.2** |
 | Wi‑Fi adapters | **Intel Wi‑Fi 6E AX411** and **Intel Wi‑Fi 7 BE200 320MHz** |
 | Operating system | Windows |
-| Confirmed Wi‑Fi 7 test | Intel BE200 /intel ax411 |
+| Confirmed Wi‑Fi 7 test | Intel BE200 / Intel AX411 |
 | Tested Intel driver | **23.0.6.4** |
+| Windows Home Location | **India (GeoId 113)** |
 
 The confirmed motherboard is **Gigabyte B760M DS3H AX Rev. 1.2**. Similar Intel 12th Gen or newer systems may behave similarly, but other platforms have not all been individually verified.
 
@@ -46,6 +47,28 @@ For the closest reproduction, use the same driver version shown in the test scre
 
 If Windows keeps reinstalling another Intel package from the Driver Store, remove the unwanted package first and then reinstall 23.0.6.4. Do not let Windows Update replace the test driver while reproducing the result.
 
+## Tested with Windows Home Location set to India
+
+Before the final retest, Windows Home Location was changed to India:
+
+```powershell
+Get-WinHomeLocation
+```
+
+Confirmed result:
+
+```text
+GeoId HomeLocation
+----- ------------
+113   India
+```
+
+The PC was then rebooted before testing again.
+
+After reboot, the Intel BE200 still connected successfully on **6 GHz Channel 101**, and the normal Windows WLAN scan still detected an **802.11be AP on Channel 165**.
+
+> Windows Home Location and the Wi‑Fi radio's regulatory domain are not necessarily the same mechanism. This section only documents the actual Windows Home Location used during the successful retest.
+
 ## 6 GHz Channel Observations
 
 For my 320 MHz / Wi‑Fi 7 testing, the most useful channel positions have been:
@@ -56,13 +79,14 @@ For my 320 MHz / Wi‑Fi 7 testing, the most useful channel positions have been:
 | **101** | Very easy to detect and connect; confirmed active Wi‑Fi 7 link |
 | **165** | Works and is detectable, but discovery has been less consistent in repeated tests |
 
-Channels **37 and 101** have been the easiest for repeated client discovery. Channel **165** can also be detected successfully; one scan below shows it at **92% signal**.
+Channels **37 and 101** have been the easiest for repeated client discovery. Channel **165** can also be detected successfully.
 
 ## Active Connection Proof — Channel 101
 
 Windows Network Properties on the Intel BE200 reports:
 
 ```text
+SSID           : TP-Link_5G-6G_MLO
 Protocol       : 802.11be
 Adapter        : Intel(R) Wi‑Fi 7 BE200 320MHz
 Driver Version : 23.0.6.4
@@ -74,7 +98,42 @@ Security       : WPA3-Personal
 
 This confirms an active **802.11be / Wi‑Fi 7 connection on 6 GHz Channel 101**.
 
-> Windows Network Properties does not explicitly print the negotiated channel width on this page. The adapter name contains “320MHz”, and the observed 4323/4323 Mbps link is consistent with a very high-rate Wi‑Fi 7 connection, but I keep the screenshot claim limited to what Windows directly reports.
+### Link-speed observation
+
+The screenshot currently published in the test record shows **4323 / 4323 Mbps**. In my testing, the Intel BE200 320 MHz link has also reached approximately **5764 Mbps** under favorable conditions.
+
+The exact reported PHY/link rate changes dynamically with signal quality, MCS, spatial streams and channel conditions, so the value shown by `netsh` can be lower at any particular moment.
+
+> A dedicated screenshot showing the ~5764 Mbps result can be added as additional proof when available.
+
+## Live Interface Proof — `netsh wlan show interfaces`
+
+Command:
+
+```powershell
+netsh wlan show interfaces
+```
+
+Relevant output from the India-region retest:
+
+```text
+Description            : Intel(R) Wi-Fi 7 BE200 320MHz
+State                  : connected
+SSID                   : TP-Link_5G-6G_MLO
+AP BSSID               : ba:6e:84:e3:5d:f5
+Band                   : 6 GHz
+Channel                : 101
+Radio type             : 802.11be
+Authentication         : WPA3-Personal (H2E)
+Receive rate (Mbps)    : 3458.8
+Transmit rate (Mbps)   : 1729.4
+Signal                 : 89%
+Rssi                   : -49
+```
+
+The same interface output also exposes colocated AP information for related 5 GHz links.
+
+The `netsh` receive/transmit values are live rates at the moment the command is run and therefore do not need to match the higher aggregated link-speed value shown in Windows Network Properties.
 
 ## PowerShell / NETSH Scan Evidence
 
@@ -89,7 +148,7 @@ netsh wlan show networks mode=bssid
 Relevant output:
 
 ```text
-SSID 3 : TP-Link_5G-6G_MLO
+SSID : TP-Link_5G-6G_MLO
     Network type            : Infrastructure
     Authentication          : WPA3-Personal
     Encryption              : CCMP
@@ -105,11 +164,11 @@ SSID 3 : TP-Link_5G-6G_MLO
 A separate 6 GHz SSID from the same AP was also visible:
 
 ```text
-SSID 4 : TP-Link_6G_be
+SSID : TP-Link_6G_be
     Authentication          : WPA3-Personal
     Encryption              : CCMP
     BSSID 1                 : ba:6e:84:e3:5d:f4
-         Signal             : 88%
+         Signal             : 90%
          Radio type         : 802.11be
          Band               : 6 GHz
          Channel            : 101
@@ -118,17 +177,17 @@ SSID 4 : TP-Link_6G_be
 
 The scan also exposes colocated 5 GHz/6 GHz BSS information and MLD metadata, showing that Windows is parsing the Wi‑Fi 7 multi-link information advertised by the AP.
 
-### Channel 165 — Wi‑Fi 7 / 6 GHz visible
+### Channel 165 — Wi‑Fi 7 / 6 GHz visible after India-region reboot
 
-A later scan detected another 6 GHz Wi‑Fi 7 AP on Channel 165:
+The same post-reboot scan detected another 6 GHz Wi‑Fi 7 AP on Channel 165:
 
 ```text
 SSID 1 : MobSoftAP_Router
     Network type            : Infrastructure
     Authentication          : WPA3-Personal
     Encryption              : CCMP
-    BSSID 1                 : 6e:8c:62:dd:77:dc
-         Signal             : 92%
+    BSSID 1                 : 36:63:b2:35:86:52
+         Signal             : 86%
          Radio type         : 802.11be
          Band               : 6 GHz
          Channel            : 165
@@ -136,7 +195,7 @@ SSID 1 : MobSoftAP_Router
          MFP Required       : 1
 ```
 
-So Channel 165 is not just theoretical in this setup: the normal Windows WLAN scanner can see an **802.11be AP on 6 GHz Channel 165** without modifying the Windows client stack.
+So Channel 165 is not just theoretical in this setup: the normal Windows WLAN scanner can see an **802.11be AP on 6 GHz Channel 165** after reboot with **Windows Home Location set to India**.
 
 ## Current Evidence Summary
 
@@ -146,6 +205,7 @@ So Channel 165 is not just theoretical in this setup: the normal Windows WLAN sc
 | NETSH scan excerpt published here | To add | ✅ | ✅ |
 | `802.11be` shown by Windows | To add | ✅ | ✅ |
 | Active connection proof published | To add | ✅ | To add |
+| Tested after Windows Home Location = India + reboot | To add | ✅ | ✅ visibility |
 | Discovery consistency | Excellent | Excellent | Less consistent |
 
 More raw results/screenshots can be added as additional channels are retested and documented.
@@ -171,7 +231,7 @@ These commands are useful because they preserve the actual Windows-reported **ra
 | Adapter | Standard | 6 GHz | Status |
 |---|---|:---:|---|
 | Intel AX411 | Wi‑Fi 6E | ✅ | Tested |
-| Intel BE200 | Wi‑Fi 7 / 802.11be | ✅ | Tested; Ch 101 and Ch 165 evidence shown |
+| Intel BE200 | Wi‑Fi 7 / 802.11be | ✅ | Tested; Ch 101 active link and Ch 165 visibility evidence shown |
 
 ## Compatibility Notes
 
@@ -198,6 +258,7 @@ If you reproduce the test on another Intel platform, please include:
 - Intel Wi‑Fi adapter model
 - exact driver version
 - Windows version/build
+- Windows Home Location
 - AP/router model and firmware
 - selected 6 GHz channel
 - `netsh wlan show networks mode=bssid` output
