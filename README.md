@@ -313,3 +313,4 @@ The **Gigabyte B760M DS3H AX Rev. 1.2 + standalone Intel BE200** combination is 
 ## Disclaimer
 
 This repository documents personal/laboratory test observations. It does **not** grant permission to operate on frequencies restricted in your jurisdiction. Regulatory limits differ by country and can change over time. Always follow the current rules applicable to your location and equipment.
+## Credit AKHILESH KUMAR SHUKLA 
