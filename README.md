@@ -25,6 +25,9 @@ With the standalone Intel BE200 and Intel driver **23.0.6.4 / Netwtw14**, Window
 | 6 GHz channel | Windows protocol | Driver | Windows aggregated link speed shown in test capture |
 |---:|---|---|---:|
 | **37** | 802.11be | 23.0.6.4 | **4803 / 4803 Mbps** |
+| **53** | 802.11be | 23.0.6.4 | **4323 / 4323 Mbps** |
+| **69** | 802.11be | 23.0.6.4 | **4323 / 4323 Mbps** |
+| **85** | 802.11be | 23.0.6.4 | **4323 / 4323 Mbps** |
 | **101** | 802.11be | 23.0.6.4 | **4323 / 4323 Mbps** |
 | **133** | 802.11be | 23.0.6.4 | **4803 / 4803 Mbps** |
 | **149** | 802.11be | 23.0.6.4 | **4323 / 4323 Mbps** |
