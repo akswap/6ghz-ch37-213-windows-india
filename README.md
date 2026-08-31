@@ -16,7 +16,7 @@ Keywords: **Intel BE200 6GHz Windows, BE200 driver 23.0.6.4, Wi‑Fi 7 6GHz, AX4
 | Operating system | Windows |
 | Tested Intel driver | **23.0.6.4** |
 | Working driver branch/service | **Netwtw14** |
-| Windows Home Location tested | **India (GeoId 113)** and **US (GeoId 244)** at different stages of testing |
+| Windows Home Location tested | **India (GeoId 113)** and **US (GeoId 244)** at different stages of testing (just eneble /desable WIFI adaptor after reboot  |
 
 ## Main Result
 
