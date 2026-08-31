@@ -1,4 +1,4 @@
-# Intel BE200 6 GHz Wi‑Fi on Windows — Driver 23.0.6.4 / AX411 / AX210 Testing
+# Intel BE200 6 GHz Wi‑Fi on Windows — Driver 23.0.6.4 / AX411 / AX210 Testing (Working)
 
 Real-world Windows testing of **Intel BE200 320MHz Wi‑Fi 7 / 6 GHz**, with additional **Intel AX411** observations and **AX210** candidate notes. The confirmed BE200 setup uses Intel driver **23.0.6.4 / Netwtw14** and has established active 802.11be connections on representative 6 GHz channels from **37 through 213**.
 
