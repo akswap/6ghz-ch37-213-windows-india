@@ -182,8 +182,8 @@ Get-WinHomeLocation
 Observed values included:
 
 ```text
-113   India
-244   US
+113   India (all 6Ghz band Limited after restart)
+244   US (100% ok Stable )
 ```
 
 Successful BE200 testing was performed after setting Windows Home Location to India and rebooting, including Channel 101 connection and Channel 165 visibility.
